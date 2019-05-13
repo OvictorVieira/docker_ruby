@@ -85,7 +85,7 @@ RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 
 USER docker
 
-WORKDIR var/www/starwars
+WORKDIR var/www/html/
 
 CMD [ "irb" ]
 
