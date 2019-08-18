@@ -10,7 +10,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ../db-dump:/docker-entrypoint-initdb.d
+      - ../db_dump:/docker-entrypoint-initdb.d
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
@@ -37,7 +37,7 @@ services:
     container_name: web_application
     privileged: true
     volumes:
-      - ./projects:/var/www/html/
+      - ../application:/var/www/html/
     ports:
       - "3000:3000"
       - "80:80"

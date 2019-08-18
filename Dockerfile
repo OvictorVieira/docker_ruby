@@ -33,8 +33,8 @@ RUN rbenv global 2.6.3
 RUN export RBENV_ROOT="${HOME}/.rbenv"
 RUN export PATH="${RBENV_ROOT}/bin:${PATH}"
 RUN sudo echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-RUN /home/docker/.rbenv/shims/gem install bundler -v 2.0.0
+RUN /home/docker/.rbenv/shims/gem install bundler
 
 RUN echo 'export PS1="\[\\033[38m\]\u\[\\033[32m\] \w\[\\033[31m\]\`git branch 2>/dev/null | grep \"^\*\" | sed -r \"s/\*\ (.*)/ \(\\1\)/\"\`\[\\033[37m\]$\[\\033[00m\] "' >> /home/docker/.bashrc
 
-WORKDIR /var/www/mkt_connect
+WORKDIR /var/www/html/web_application
