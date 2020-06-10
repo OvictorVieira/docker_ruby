@@ -1,7 +1,5 @@
 FROM alpine:3.11
 
-RUN apk add --update make
-
 # ruby 2.6.6 instalation
 RUN apk add --no-cache \
 		gmp-dev
@@ -236,18 +234,39 @@ RUN set -x \
 
 STOPSIGNAL SIGTERM
 
+CMD ["nginx", "-g", "daemon off;"]
+
 # passanger
-RUN apk add --no-cache --update libexecinfo libexecinfo-dev ca-certificates ruby procps curl pcre libstdc++ build-base ruby-dev linux-headers curl-dev pcre-dev ruby-dev
+ENV PASSENGER_VERSION="6.0.5" \
+    PATH="/opt/passenger/bin:$PATH"
 
-RUN gem update --system && \
-    gem install passenger
+RUN PACKAGES="ca-certificates ruby procps curl pcre libstdc++ libexecinfo" && \
+    BUILD_PACKAGES="build-base ruby-dev linux-headers curl-dev pcre-dev ruby-dev libexecinfo-dev" && \
+    apk add --no-cache $PACKAGES $BUILD_PACKAGES && \
+# download and extract
+    mkdir -p /opt && \
+    curl -L https://s3.amazonaws.com/phusion-passenger/releases/passenger-$PASSENGER_VERSION.tar.gz | tar -xzf - -C /opt && \
+    mv /opt/passenger-$PASSENGER_VERSION /opt/passenger && \
+    export EXTRA_PRE_CFLAGS='-O' EXTRA_PRE_CXXFLAGS='-O' EXTRA_LDFLAGS='-lexecinfo' && \
+# compile agent
+    passenger-config compile-agent --auto --optimize && \
+    passenger-config build-native-support && \
+# app directory
+    mkdir -p /usr/src/app && \
+# Cleanup passenger src directory
+    rm -rf /tmp/* && \
+    mv /opt/passenger/src/ruby_supportlib /tmp && \
+    mv /opt/passenger/src/nodejs_supportlib /tmp && \
+    mv /opt/passenger/src/helper-scripts /tmp && \
+    rm -rf /opt/passenger/src/* && \
+    mv /tmp/* /opt/passenger/src/ && \
+# Cleanup
+    passenger-config validate-install --auto && \
+    apk del $BUILD_PACKAGES && \
+    rm -rf /var/cache/apk/* \
+        /tmp/* \
+        /opt/passenger/doc
 
-RUN /bin/sh -c 'passenger-install-nginx-module --auto-download --auto --prefix=/opt/nginx'
+RUN gem install passenger
 
 RUN echo 'export PS1="\[\\033[38m\]\u\[\\033[32m\] \w\[\\033[31m\]\`git branch 2>/dev/null | grep \"^\*\" | sed -r \"s/\*\ (.*)/ \(\\1\)/\"\`\[\\033[37m\]$\[\\033[00m\] "' >> ~/.bashrc
-
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
