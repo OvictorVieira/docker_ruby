@@ -1,5 +1,7 @@
 FROM alpine:3.11
 
+LABEL author="Victor Hugo Vieira" email="victor.h.souza.vieira@gmail.com"
+
 # ruby 2.6.6 instalation
 RUN apk add --no-cache \
 		gmp-dev
@@ -12,9 +14,9 @@ RUN set -eux; \
 		echo 'update: --no-document'; \
 	} >> /usr/local/etc/gemrc
 
-ENV RUBY_MAJOR 2.6
-ENV RUBY_VERSION 2.6.6
-ENV RUBY_DOWNLOAD_SHA256 5db187882b7ac34016cd48d7032e197f07e4968f406b0690e20193b9b424841f
+ENV RUBY_MAJOR 2.7
+ENV RUBY_VERSION 2.7.1
+ENV RUBY_DOWNLOAD_SHA256 b224f9844646cc92765df8288a46838511c1cec5b550d8874bd4686a904fcee7
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
