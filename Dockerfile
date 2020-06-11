@@ -7,20 +7,8 @@ RUN apk add --no-cache \
 		gmp-dev \
         git \
         postgresql-dev \
-        zlib-dev \
         g++ \
-        make \
-        libressl-dev \
-        openssl-dev \
-        readline-dev \
-        sqlite-dev \
-        sqlite \
-        libxml2-dev \
-        libxslt-dev \
-        libffi-dev \
-        yaml-dev \
-        nodejs \
-        yarn
+        make
 
 # skip installing gem documentation
 RUN set -eux; \
@@ -269,6 +257,8 @@ RUN PACKAGES="ca-certificates ruby procps curl pcre libstdc++ libexecinfo" && \
 # compile agent
     passenger-config compile-agent --auto --optimize && \
     passenger-config build-native-support && \
+# app directory
+    mkdir -p /usr/src/app && \
 # Cleanup passenger src directory
     rm -rf /tmp/* && \
     mv /opt/passenger/src/ruby_supportlib /tmp && \
