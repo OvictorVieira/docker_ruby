@@ -2,9 +2,25 @@ FROM alpine:3.11
 
 LABEL author="Victor Hugo Vieira" email="victor.h.souza.vieira@gmail.com"
 
-# ruby 2.6.6 instalation
+# ruby 2.7.1 instalation
 RUN apk add --no-cache \
-		gmp-dev
+		gmp-dev \
+        git \
+        postgresql-dev \
+        zlib-dev \
+        g++ \
+        make \
+        libressl-dev \
+        openssl-dev \
+        readline-dev \
+        sqlite-dev \
+        sqlite \
+        libxml2-dev \
+        libxslt-dev \
+        libffi-dev \
+        yaml-dev \
+        nodejs \
+        yarn
 
 # skip installing gem documentation
 RUN set -eux; \
