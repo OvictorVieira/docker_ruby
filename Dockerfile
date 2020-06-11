@@ -269,8 +269,6 @@ RUN PACKAGES="ca-certificates ruby procps curl pcre libstdc++ libexecinfo" && \
 # compile agent
     passenger-config compile-agent --auto --optimize && \
     passenger-config build-native-support && \
-# app directory
-    mkdir -p /usr/src/app && \
 # Cleanup passenger src directory
     rm -rf /tmp/* && \
     mv /opt/passenger/src/ruby_supportlib /tmp && \
