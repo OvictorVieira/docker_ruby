@@ -271,6 +271,8 @@ RUN PACKAGES="ca-certificates ruby procps curl pcre libstdc++ libexecinfo" && \
         /tmp/* \
         /opt/passenger/doc
 
+ADD nginx.conf /opt/nginx/conf/nginx.conf
+
 RUN echo 'export PS1="\[\\033[38m\]\u\[\\033[32m\] \w\[\\033[31m\]\`git branch 2>/dev/null | grep \"^\*\" | sed -r \"s/\*\ (.*)/ \(\\1\)/\"\`\[\\033[37m\]$\[\\033[00m\] "' >> ~/.bashrc
 
 CMD ["nginx", "-g", "daemon off;"]
